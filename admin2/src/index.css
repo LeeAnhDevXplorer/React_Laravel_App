@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.header__btn-search label.MuiInputLabel-outlined {
+  font-size: 14px;
+  line-height: 10px;
+}
+
+.header__btn-search input {
+  height: 40px !important;
+  padding: 0px 14px !important;
+  font-size: 12px;
+  line-height: 40px !important;
+}
+
+.MuiPaper-elevation {
+  top: 94px !important;
+  width: 300px !important;
+  right: 60px !important;
+}
+
+.MuiPaper-elevation ul {
+  margin: 0;
+  padding: 10px;
+}
+
+.MuiPaper-elevation ul li {
+  margin: 0;
+  padding: 7px 20px;
+  border-radius: 10px;
+}
+
+.act {
+  background-color: rgb(37 99 235, 0.6);
+}
+
+.heading {
+  background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));
+}
