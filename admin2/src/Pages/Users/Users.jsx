@@ -87,7 +87,7 @@ const Users = () => {
                               <td className="text-left px-6 py-3 opacity-100 bg-transparent text-[#344767] shadow-none text-[0.875rem] border-b border-[#f0f2f5]">
                                 <div className="inline-block w-max opacity-100 bg-transparent text-[#7b809a] shadow-none align-middle">
                                   <span className="m-0 font-roboto text-sm leading-6 tracking-[0.02857em] block opacity-100 text-[#344767] font-semibold no-underline align-baseline">
-                                    {item.avata_url}
+                                    {item.avatar_url}
                                   </span>
                                 </div>
                               </td>

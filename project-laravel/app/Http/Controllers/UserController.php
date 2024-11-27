@@ -67,8 +67,6 @@ class UserController extends Controller
 
         return response()->json($user);
     }
-
-    // Xóa người dùng
     public function destroy($id)
     {
         $user = User::findOrFail($id);
