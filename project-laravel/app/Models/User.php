@@ -9,10 +9,10 @@ class User extends Model
 {
     use HasFactory;
 
-    // Đặt tên bảng nếu tên bảng không theo quy ước (bảng 'users' sẽ tự động được Laravel nhận diện)
-    // protected $table = 'users';
+    // Đặt tên bảng (nếu khác với tên mặc định là 'users')
+    protected $table = 'users';
 
-    // Định nghĩa các trường có thể được gán hàng loạt (mass assignable)
+    // Các thuộc tính có thể gán (fillable)
     protected $fillable = [
         'name',
         'email',
@@ -21,11 +21,26 @@ class User extends Model
         'role',
     ];
 
-    // Đảm bảo rằng mật khẩu sẽ được mã hóa khi tạo mới hoặc cập nhật
+    // Mối quan hệ với bảng projects qua bảng trung gian project_user
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_user')->withPivot('role')->withTimestamps();
+    }
+
+    // Mối quan hệ với bảng comments
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // Mối quan hệ với bảng notifications
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    // Giải mã mật khẩu
     protected $hidden = [
         'password',
     ];
-
-    // Tự động quản lý các trường thời gian như `created_at` và `updated_at`
-    public $timestamps = true;
 }

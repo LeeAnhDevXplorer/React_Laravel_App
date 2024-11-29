@@ -4,74 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // Hiển thị danh sách người dùng
+    // Hiển thị danh sách tất cả người dùng
     public function index()
     {
-        $users = User::all();
-        return response()->json($users);
+        $users = User::all();  // Lấy tất cả người dùng từ bảng
+        return response()->json($users);  // Trả về dưới dạng JSON
     }
 
-    // Tạo mới người dùng
-    public function store(Request $request)
-    {
-        // Validate dữ liệu
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,member',
-        ]);
-
-        // Tạo mới người dùng
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'avatar_url' => $request->avatar_url ?? null, // Sử dụng giá trị mặc định nếu không có
-        ]);
-
-        return response()->json($user, 201);
-    }
-    // Lấy thông tin người dùng theo ID
+    // Hiển thị thông tin chi tiết một người dùng theo ID
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return response()->json($user);
+        $user = User::findOrFail($id);  // Tìm người dùng theo ID
+        return response()->json($user);  // Trả về thông tin chi tiết người dùng
     }
 
-    // Cập nhật thông tin người dùng
-    public function update(Request $request, $id)
+    // Thêm mới một người dùng
+    public function store(Request $request)
     {
-        // Validate dữ liệu
-        $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'email|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'in:admin,member',
+        // Xác thực dữ liệu (bạn có thể thêm các quy tắc xác thực nếu cần)
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
         ]);
 
-        $user = User::findOrFail($id);
-
-        $user->update([
-            'name' => $request->name ?? $user->name,
-            'email' => $request->email ?? $user->email,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
-            'role' => $request->role ?? $user->role,
-            'avatar_url' => $request->avatar_url ?? $user->avatar_url,
+        // Tạo người dùng mới và lưu vào cơ sở dữ liệu
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),  // Mã hóa mật khẩu
+            'role' => $request->role,  // Nếu có trường role trong request
         ]);
 
-        return response()->json($user);
-    }
-    public function destroy($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return response()->json(['message' => 'User deleted successfully']);
+        return response()->json($user, 201);  // Trả về người dùng vừa tạo
     }
 }
